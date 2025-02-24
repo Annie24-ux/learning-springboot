@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BusinessService {
@@ -48,17 +49,32 @@ public class BusinessService {
 
             if(businessExists){
                 System.out.println("Choose another name or location");
-                throw new RuntimeException("Another business with the same name and location already exists");
+                return  businessRepository.save(null);
+//                throw new RuntimeException("Another business with the same name and location already exists");
+            } else {
+                existingBusiness.setName(updatedBusiness.getName());
+                existingBusiness.setDescription(updatedBusiness.getDescription());
+                existingBusiness.setLocation(updatedBusiness.getLocation());
+                existingBusiness.setContact(updatedBusiness.getContact());
+                existingBusiness.setOwner(updatedBusiness.getOwner());
+
+                return businessRepository.save(existingBusiness);
+
             }
+    }
 
-            existingBusiness.setName(updatedBusiness.getName());
-            existingBusiness.setDescription(updatedBusiness.getDescription());
-            existingBusiness.setLocation(updatedBusiness.getLocation());
-            existingBusiness.setContact(updatedBusiness.getContact());
-            existingBusiness.setOwner(updatedBusiness.getOwner());
+    public Business getBusinessById(Long id) {
+        Optional<Business> businessByTheId = businessRepository.findById(id);
 
-            return businessRepository.save(existingBusiness);
+        if(businessByTheId.isPresent()){
+            return businessByTheId.get();
+        }else{
+            System.out.println("Such business does not exist");
+            throw new RuntimeException();
         }
+    }
+
+
     }
 
 

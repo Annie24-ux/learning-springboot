@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("api/v1/business")
+@RequestMapping("api/v1/businesses")
 @RestController
 public class BusinessController{
     private final BusinessService businessService;
@@ -42,6 +42,13 @@ public class BusinessController{
         List<Business> businesses = businessService.getBusinesses();
 
         return ResponseEntity.ok(businesses);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Business> getBusinessbyId(@PathVariable Long id) {
+        Business businessWithId = businessService.getBusinessById(id);
+
+        return ResponseEntity.ok(businessWithId);
     }
 
     @PutMapping("/{id}")
